@@ -5,68 +5,52 @@ import { useParams } from "react-router-dom";
 
 const ViewPaste = () => {
   const { id } = useParams();
-
-  console.log(id)
-
   const pastes = useSelector((state) => state.paste.pastes);
+  const paste = pastes.find((p) => p._id === id);
 
-  // Filter pastes based on search term (by title or content)
-  const paste = pastes.filter((paste) => paste._id === id)[0];
+  if (!paste) return null;
 
-  console.log("Paste->",paste);
   return (
-    <div className="w-full h-full py-10 max-w-[1200px] mx-auto px-5 lg:px-0">
-      <div className="flex flex-col gap-y-5 items-start">
-        <input
-          type="text"
-          placeholder="Title"
-          value={paste.title}
-          disabled
-          className="w-full text-black text- border border-input rounded-md p-2"
-        />
-        <div
-          className={`w-full flex flex-col items-start relative rounded bg-opacity-10 border border-[rgba(128,121,121,0.3)] backdrop-blur-2xl`}
-        >
-          <div
-            className={`w-full rounded-t flex items-center justify-between gap-x-4 px-4 py-2 border-b border-[rgba(128,121,121,0.3)]`}
-          >
-            <div className="w-full flex gap-x-[6px] items-center select-none group">
-              <div className="w-[13px] h-[13px] rounded-full flex items-center justify-center p-[1px] overflow-hidden bg-[rgb(255,95,87)]" />
+   <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-24">
+      <div className="max-w-4xl mx-auto px-6 py-20">
 
-              <div
-                className={`w-[13px] h-[13px] rounded-full flex items-center justify-center p-[1px] overflow-hidden bg-[rgb(254,188,46)]`}
-              />
-
-              <div className="w-[13px] h-[13px] rounded-full flex items-center justify-center p-[1px] overflow-hidden bg-[rgb(45,200,66)]" />
-            </div>
-            {/* Circle and copy btn */}
-            <div
-              className={`w-fit rounded-t flex items-center justify-between gap-x-4 px-4`}
+        <div className="
+          bg-white dark:bg-slate-900
+          border border-slate-200 dark:border-slate-700
+          rounded-3xl
+          shadow-[0_25px_80px_rgba(0,0,0,0.18)]
+          overflow-hidden
+        ">
+          {/* HEADER */}
+          <div className="px-6 py-4 flex justify-between items-center border-b border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
+            <h2 className="text-xl font-bold">{paste.title}</h2>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(paste.content);
+                toast.success("Copied to clipboard");
+              }}
+              className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition"
             >
-              {/*Copy  button */}
-              <button
-                className={`flex justify-center items-center  transition-all duration-300 ease-in-out group`}
-                onClick={() => {
-                  navigator.clipboard.writeText(paste.content);
-                  toast.success("Copied to Clipboard");
-                }}
-              >
-                <Copy className="group-hover:text-sucess-500" size={20} />
-              </button>
-            </div>
+              <Copy size={18} />
+            </button>
           </div>
 
-          {/* TextArea */}
-          <textarea
-            value={paste.content}
-            disabled
-            placeholder="Write Your Content Here...."
-            className="w-full p-3  focus-visible:ring-0"
-            style={{
-              caretColor: "#000",
-            }}
-            rows={20}
-          />
+          {/* CONTENT */}
+          <div className="p-8">
+            <textarea
+              value={paste.content}
+              readOnly
+              className="
+                w-full
+                min-h-[300px]
+                bg-transparent
+                resize-none
+                outline-none
+                text-slate-800 dark:text-slate-200
+                leading-8
+              "
+            />
+          </div>
         </div>
       </div>
     </div>
