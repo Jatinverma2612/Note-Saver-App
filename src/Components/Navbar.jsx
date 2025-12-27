@@ -1,56 +1,103 @@
-import { NavLink } from "react-router-dom";
-import { Moon, Sun, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useTheme } from "../context/ThemeContext";
+import { NavLink } from "react-router-dom";
+import { Menu, X, Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
-  const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(
+    document.documentElement.classList.contains("dark")
+  );
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle("dark");
+    setDark(!dark);
+  };
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-[#FFF7ED] dark:bg-slate-950 border-b border-stone-200 dark:border-slate-800">
-      <div className="max-w-[1200px] mx-auto h-20 px-4 sm:px-6 flex items-center justify-between">
+    <header
+      className="
+        sticky top-0 z-50
+        bg-[#fff8ee] dark:bg-[#0b1220]
+        border-b border-black/10 dark:border-white/10
+        transition-colors
+      "
+    >
+      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
 
-        {/* Logo */}
-        <div className="font-extrabold text-2xl tracking-tighter text-[#292524] dark:text-white">
-          Noted<span className="text-orange-500 text-4xl leading-none">.</span>
+        {/* LOGO */}
+        <div className="text-xl font-bold text-slate-900 dark:text-white">
+          Noted<span className="text-orange-500">.</span>
         </div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 font-semibold text-[#57534E] dark:text-slate-300">
-          <NavLink to="/" className="hover:text-orange-500">Home</NavLink>
-          <NavLink to="/notes" className="hover:text-orange-500">My Notes</NavLink>
+        {/* DESKTOP MENU */}
+        <nav className="hidden md:flex items-center gap-6">
+          <NavLink
+            to="/"
+            className="text-slate-700 dark:text-slate-200 hover:text-orange-500"
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/notes"
+            className="text-slate-700 dark:text-slate-200 hover:text-orange-500"
+          >
+            My Notes
+          </NavLink>
         </nav>
 
-        {/* Right */}
+        {/* ACTIONS */}
         <div className="flex items-center gap-3">
+          {/* THEME TOGGLE */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full bg-white dark:bg-slate-800"
+            className="
+              p-2 rounded-full
+              bg-black/5 dark:bg-white/10
+              text-slate-700 dark:text-slate-200
+              hover:text-orange-500
+            "
           >
-            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          <button className="hidden sm:block px-5 py-2.5 bg-orange-500 text-white font-bold rounded-full hover:bg-orange-600">
+          {/* SIGN UP */}
+          <button className="hidden sm:block px-4 py-1.5 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600">
             Sign Up
           </button>
 
-          {/* Mobile Menu Btn */}
+          {/* MOBILE MENU BTN */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2"
+            className="md:hidden p-2 text-slate-800 dark:text-white"
           >
-            {open ? <X /> : <Menu />}
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       {open && (
-        <div className="md:hidden px-6 pb-6 flex flex-col gap-4 font-semibold text-[#57534E] dark:text-slate-300 bg-[#FFF7ED] dark:bg-slate-950">
-          <NavLink to="/" onClick={() => setOpen(false)}>Home</NavLink>
-          <NavLink to="/notes" onClick={() => setOpen(false)}>My Notes</NavLink>
-          <button className="text-left text-orange-500">Sign Up</button>
+        <div className="md:hidden bg-[#fff8ee] dark:bg-[#0b1220] border-t border-black/10 dark:border-white/10">
+          <nav className="flex flex-col px-4 py-4 gap-3">
+            <NavLink
+              to="/"
+              onClick={() => setOpen(false)}
+              className="text-slate-800 dark:text-slate-200"
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/notes"
+              onClick={() => setOpen(false)}
+              className="text-slate-800 dark:text-slate-200"
+            >
+              My Notes
+            </NavLink>
+
+            <button className="mt-2 px-4 py-2 rounded-lg bg-orange-500 text-white">
+              Sign Up
+            </button>
+          </nav>
         </div>
       )}
     </header>
